@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "es2015",
     "target": "es2015",
-    "checkJs": true
+    "checkJs": false
   },
   "include": ["*"],
   "exclude": ["node_modules"]
