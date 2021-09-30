@@ -4,6 +4,6 @@
     "target": "es2015",
     "checkJs": false
   },
-  "include": ["*"],
+  "include": ["*", "Array/chunk.js"],
   "exclude": ["node_modules"]
 }
