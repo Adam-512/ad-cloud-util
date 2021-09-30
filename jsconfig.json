@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "module": "es2015",
-    "target": "es2015",
-    "checkJs": false
-  },
-  "include": ["*", "Array/chunk.js"],
-  "exclude": ["node_modules"]
-}
