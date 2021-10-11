@@ -1,65 +1,90 @@
-/* 
-    find all value not in targetValues
-    arr {Array} source array
-    targetArr {Array} array compare to
-    comparator {Funtion} condition of pick value
- */
-const Large_Array_Size = 200
-function baseDifference(arr=[], targetArr=[], comparator) {
-	if (!arr.length) {
-		return []
-	}
-	let includesFunc
-	let result = []
-	let isCommon = true
+const Large_Size = 200
 
-	// use Array.indexOf to compare
-	if (comparator) {
-		isCommon = false
-		includesFunc = arrayIncludeWith
-	}
-	// user Map.has to compare
-	else if (arr.length > Large_Array_Size) {
-		isCommon = false
-		targetArr = new SetCache(arr)
-		includesFunc = targetArr.has
-	}
+// 数组元素是简单类型
+export function simpleDifference(arr, targetArr) {
+  let result = []
+  if (!arr.length) {
+    return []
+  }
+  if (!targetArr.length) {
+    return arr
+  }
 
-	for (let value of arr) {
-		console.log(isCommon)
-		// common differrence
-		if (isCommon) {
-			//loadash source code -- why use while loop here,but not Array.includes?
-			if(!targetArr.includes(value))
-				result.push(value)
-		}
-		//with comparator or big size compare
-		else if (!includesFunc(targetArr, value, comparator)) {
-			result.push(value)
-		}
-	}
+  if (targetArr.length > Large_Size) {
+    let cache = new Map()
+    targetArr.map((v) => cache.set(v))
+    for (let value of arr) {
+      if (!cache.has(value)) {
+        result.push(value)
+      }
+    }
+  } else {
+    for (let value of arr) {
+      if (!targetArr.includes(value)) {
+        result.push(value)
+      }
+    }
+  }
 
-	return result
+  return result
 }
 
-function SetCache(arr) {
-	this.map = new Map()
-	for (let value of arr) {
-		this.map.set(value, undefined)
-	}
-}
-SetCache.prototype.has = function (key) {
-	this.map.has(key)
+// console.log(simpleDifference([1, 2, 3], [3, 4]))
+
+//数组元素是复杂类型，或者传入function来处理每个元素
+export function differenceBy(arr, targetArr, iteretee) {
+  let result = []
+  let values = []
+  let itera = iteretee
+  let isCommon = true
+  if (!arr.length) {
+    return []
+  }
+  if (!targetArr.length) {
+    return arr
+  }
+
+  if (iteretee) {
+    //function或指定某个字段
+    iteretee =
+      typeof iteretee == 'function'
+        ? iteretee
+        : function (obj) {
+            return obj[itera]
+          }
+    values = targetArr.map((v) => iteretee(v))
+  }
+
+  if (targetArr.length > Large_Size) {
+    isCommon = false
+    values = new Map()
+    targetArr.map((v) => values.set(v))
+  }
+
+  for (let value of arr) {
+    let computed = iteretee ? iteretee(value) : value
+    if (isCommon) {
+      if (!values.includes(computed)) {
+        result.push(value)
+      }
+    } else {
+      if (!values.has(computed)) {
+        result.push(value)
+      }
+    }
+  }
+
+  return result
 }
 
-function arrayIncludeWith(arr, target, comparator) {
-	for (let value of arr) {
-		if (comparator(value, target)) {
-			return true
-		}
-	}
-	return false
-}
-
-let res =  baseDifference([9],[1,2,3,4,5,6,7,8])
-console.log(res)
+// console.log(differenceBy([1.2, 3.2], [4.2], Math.floor))
+// console.log(
+//   differenceBy(
+//     [
+//       { x: 2, y: 3 },
+//       { x: 1, y: 6 },
+//     ],
+//     [{ y: 3 }],
+//     'y'
+//   )
+// )
