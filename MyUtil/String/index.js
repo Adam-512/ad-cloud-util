@@ -20,4 +20,5 @@ export function fillString(str, value, leftKepp, rightKeep, fillLen) {
   }
 }
 
+//output: 1**********6789
 console.log(fillString('123456789', '*', 1, 4, 10))
