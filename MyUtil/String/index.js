@@ -22,3 +22,19 @@ export function fillString(str, value, leftKepp, rightKeep, fillLen) {
 
 //output: 1**********6789
 console.log(fillString('123456789', '*', 1, 4, 10))
+
+
+
+/**
+ * 格式化显示数字
+ * @param {BigNumber} num
+ **/
+ export function formatNumber(num, digits = 3) {
+  num = num.toNumber()
+  return num
+    ? num
+      .toFixed(digits)
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      .replace('.000', '')
+    : '0'
+}
