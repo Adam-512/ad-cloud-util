@@ -38,3 +38,13 @@ console.log(fillString('123456789', '*', 1, 4, 10))
       .replace('.000', '')
     : '0'
 }
+
+
+//科学计数法还原
+export function stringNumber(val) {
+  let result = String(val)
+  if (result.indexOf('-') >= 0) {
+    result = '0' + String(Number(result) + 1).substr(1)
+  }
+  return result
+}
